@@ -16,8 +16,11 @@ st.subheader("Developed to learn Python")
 st.write("It's my first web app")
 
 for todo in todos:
-    st.checkbox(todo)
+    checkbox = st.checkbox(todo, key=todo)
+    if checkbox:
+        todos.remove(todo)
+        functions.write_todos(todos)
+        del st.session_state[todo]
+        st.rerun()
 
 st.text_input(label="", placeholder="Enter a todo", on_change=add_todo, key="new_todo")
-
-st.session_state
