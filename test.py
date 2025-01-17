@@ -1,47 +1,45 @@
-import FreeSimpleGUI as sg
+def move(player_position, x, y):
+    new_player_position = player_position[:]
+    new_player_position[0] += x
+    new_player_position[1] += y
+    if 0 <= new_player_position[0] <= 8 and 0 <= new_player_position[1] <= 8:
+        maze[player_position[0]][player_position[1]] = " . "
+        maze[new_player_position[0]][new_player_position[1]] = " x "
+        return new_player_position
+    else:
+        return player_position
 
 
-def convert(feet, inches):
-    meters = feet * 0.3048 + inches * 0.0254
-    return meters
+maze = [
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+    [" . ", " . ", " . ", " . ", " . ", " . ", " . ", " . ", " . "],
+]
 
-
-sg.theme("Black")
-
-feet_label = sg.Text("Enter feet: ")
-feet_input = sg.Input(key="feet")
-
-inches_label = sg.Text("Enter inches: ")
-inches_input = sg.Input(key="inches")
-
-button = sg.Button("Convert")
-output_label = sg.Text("", key="output")
-exit_button = sg.Button("Exit")
-
-window = sg.Window(
-    "Convertor",
-    layout=[
-        [feet_label, feet_input],
-        [inches_label, inches_input],
-        [button, exit_button, output_label],
-    ],
-)
+player_position = [4, 4]
+maze[player_position[0]][player_position[1]] = " x "
 
 while True:
-    event, values = window.read()
-    match event:
-        case "Exit":
+    for row in maze:
+        for space in row:
+            print(space, end="")
+        print()
+    print(player_position)
+    player_move = input("Enter w, a, s, d, or x: ")
+    match player_move:
+        case "x":
             break
-        case sg.WIN_CLOSED:
-            break
-    try:
-        feet = float(values["feet"])
-        inches = float(values["inches"])
-    except ValueError:
-        sg.popup("Please ensure both boxes are filled")
-        continue
-    result = convert(feet, inches)
-    window["output"].update(value=f"{result} m", text_color="white")
-
-
-window.close()
+        case "w":
+            player_position = move(player_position, -1, 0)
+        case "s":
+            player_position = move(player_position, 1, 0)
+        case "a":
+            player_position = move(player_position, 0, -1)
+        case "d":
+            player_position = move(player_position, 0, 1)
